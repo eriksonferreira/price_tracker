@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import uvicorn
-import app.products_api as products_api
-import app.store_api as store_api
-import app.history_api as history_api
-import app.price_api as price_api
+import products_api
+import store_api
+import history_api
+import price_api
+from telegram.app.api.v1.api import api_router
+from telegram.app.config import settings
+
 
 tags_metadata = [
     {
@@ -23,6 +26,10 @@ tags_metadata = [
         "name": "price",
         "description": "Manage prices.",
     },
+    {
+        "name": "telegram",
+        "description": "Send telegram messages.",
+    },
 ]
 
 
@@ -33,6 +40,7 @@ app.include_router(products_api.router)
 app.include_router(store_api.router)
 app.include_router(history_api.router)
 app.include_router(price_api.router)
+app.include_router(api_router, prefix="/telegram")
 
 # GET operation at route '/'
 @app.get('/')
