@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from crud_history import get_all_historys, create_history, get_history_info_by_id, update_history_info, delete_history_info
 from database import get_db
 from exceptions import HistoryException
-from schemas import Product, CreateAndUpdateProduct, PaginatedProductInfo
+from schemas import Product, CreateAndUpdateHistory, PaginatedProductInfo
 
 router = APIRouter()
 
@@ -26,7 +26,7 @@ class Products:
 
     # API endpoint to add a history info to the database
     @router.post("/historys", tags=["history"])
-    def add_history(self, history_info: CreateAndUpdateProduct):
+    def add_history(self, history_info: CreateAndUpdateHistory):
 
         try:
             history_info = create_history(self.session, history_info)
@@ -48,7 +48,7 @@ def get_history_info(history_id: int, session: Session = Depends(get_db)):
 
 # API to update a existing history info
 @router.put("/historys/{history_id}", response_model=Product, tags=["history"])
-def update_history(history_id: int, new_info: CreateAndUpdateProduct, session: Session = Depends(get_db)):
+def update_history(history_id: int, new_info: CreateAndUpdateHistory, session: Session = Depends(get_db)):
 
     try:
         history_info = update_history_info(session, history_id, new_info)

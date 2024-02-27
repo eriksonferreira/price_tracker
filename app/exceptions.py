@@ -1,6 +1,6 @@
 # exceptions.py
 class ProductInfoException(Exception):
-    ...
+     ...
 
 
 class ProductInfoNotFoundError(ProductInfoException):
@@ -10,9 +10,19 @@ class ProductInfoNotFoundError(ProductInfoException):
 
 
 class ProductInfoInfoAlreadyExistError(ProductInfoException):
-    def __init__(self):
+    def __init__(self, msg, product_details):
         self.status_code = 409
-        self.detail = "Product Info Already Exists"
+        self.detail = msg
+        self.product_details = product_details
+    
+    def to_response(self):
+        return {
+            "status_code": self.status_code,
+            "content": {
+                "message": self.detail,
+                "product_details": self.product_details
+            }
+        }
 
 
 class StoreException(Exception):

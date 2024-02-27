@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from crud_products import get_all_products, create_product, get_product_info_by_id, update_product_info, delete_product_info
 from database import get_db
 from exceptions import ProductInfoException
-from schemas import Product, CreateAndUpdateProduct, PaginatedProductInfo
+from schemas import Product, CreateAndUpdateProduct, PaginatedProductInfo, ProductWithPrices
 
 router = APIRouter()
 
@@ -20,9 +20,9 @@ class Products:
     def list_products(self, limit: int = 10, offset: int = 0):
 
         products_list = get_all_products(self.session, limit, offset)
-        response = {"limit": limit, "offset": offset, "data": products_list}
-
-        return response
+        # Serializa usando Pydantic
+        paginated_response = PaginatedProductInfo(limit=limit, offset=offset, data=products_list)
+        return paginated_response
 
     # API endpoint to add a product info to the database
     @router.post("/products", tags=["products"])
@@ -32,15 +32,16 @@ class Products:
             product_info = create_product(self.session, product_info)
             return product_info
         except ProductInfoException as cie:
-            raise HTTPException(**cie.__dict__)
-
+            response = cie.to_response()
+            raise HTTPException(status_code=response["status_code"], detail=response["content"])
 
 # API endpoint to get info of a particular product
-@router.get("/products/{product_id}", response_model=Product, tags=["products"])
+@router.get("/products/{product_id}", response_model=ProductWithPrices, tags=["products"])
 def get_product_info(product_id: int, session: Session = Depends(get_db)):
 
     try:
         product_info = get_product_info_by_id(session, product_id)
+        # print(product_info)
         return product_info
     except ProductInfoException as cie:
         raise HTTPException(**cie.__dict__)

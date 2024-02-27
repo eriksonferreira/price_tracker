@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from crud_prices import get_all_prices, create_price, get_price_info_by_id, update_price_info, delete_price_info
 from database import get_db
 from exceptions import PricesException
-from schemas import Price, CreateAndUpdatePrice, PaginatedPrice
+from schemas import Price, CreateAndUpdatePrice, PaginatedPrice, PriceWithDetails
 
 router = APIRouter()
 
@@ -36,7 +36,7 @@ class Prices:
 
 
 # API endpoint to get info of a particular price
-@router.get("/prices/{price_id}", response_model=Price, tags=["price"])
+@router.get("/prices/{price_id}", response_model=PriceWithDetails, tags=["price"])
 def get_price_info(price_id: int, session: Session = Depends(get_db)):
 
     try:

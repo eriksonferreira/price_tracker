@@ -4,30 +4,6 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 
-# --------- Products ---------
-# TO support creation and update APIs
-class CreateAndUpdateProduct(BaseModel):
-    type: str
-    manufacturer: str
-    model: str
-    memory: str
-    memory_type: str
-    sku: str
-
-
-# TO support list and get APIs
-class Product(CreateAndUpdateProduct):
-    id: int
-    class Config:
-        orm_mode = True
-
-
-# To support list Products API
-class PaginatedProductInfo(BaseModel):
-    limit: int
-    offset: int
-    data: List[Product]
-
 # --------- Store ---------
 class CreateAndUpdateStore(BaseModel):
     name: str
@@ -51,14 +27,14 @@ class CreateAndUpdateHistory(BaseModel):
     product_id: int
     store_id: int
     price: float
+    price_credit: float
     url: str
-    date: datetime
+    date: int
 
 class History(CreateAndUpdateHistory):
     id: int
     class Config:
         orm_mode = True
-
 
 class PaginatedHistory(BaseModel):
     limit: int
@@ -85,3 +61,72 @@ class PaginatedPrice(BaseModel):
     limit: int
     offset: int
     data: List[Price]
+
+    
+# --------- Products ---------
+# TO support creation and update APIs
+class CreateAndUpdateProduct(BaseModel):
+    type: str
+    manufacturer: str
+    model: str
+    memory: str
+    memory_type: str
+    sku: str
+
+
+# TO support list and get APIs
+class Product(CreateAndUpdateProduct):
+    id: int
+    prices: Optional[List[Price]] = None  # Novo campo para preços relacionados
+    class Config:
+        orm_mode = True
+
+
+class StoreDetail(BaseModel):
+    id: int
+    name: str
+    base_url: str
+    logo: str
+
+    class Config:
+        orm_mode = True
+
+class HistoryDetail(BaseModel):
+    id: int
+    price: float
+    price_credit: float
+    date: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class StoreWithDetails(Store):
+    prices: Optional[List[Price]] = None
+    history: Optional[List[History]] = None
+
+    class Config:
+        orm_mode = True
+
+
+class PriceWithDetails(Price):
+    store: Optional[StoreDetail] = None
+    all_time_low_history: Optional[HistoryDetail] = None
+
+    class Config:
+        orm_mode = True
+
+class ProductWithPrices(Product):
+    prices: Optional[List[PriceWithDetails]] = None
+
+    class Config:
+        orm_mode = True
+
+# To support list Products API
+class PaginatedProductInfo(BaseModel):
+    limit: int
+    offset: int
+    data: List[ProductWithPrices]  # Atualize para usar ProductWithPrices
+
+    class Config:
+        orm_mode = True

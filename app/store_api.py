@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from crud_store import get_all_stores, create_store, get_store_info_by_id, update_store_info, delete_store_info
 from database import get_db
 from exceptions import StoreException
-from schemas import Store, CreateAndUpdateStore, PaginatedStore
+from schemas import Store, CreateAndUpdateStore, PaginatedStore, StoreWithDetails
 
 router = APIRouter()
 
@@ -36,7 +36,7 @@ class Stores:
 
 
 # API endpoint to get info of a particular store
-@router.get("/stores/{store_id}", response_model=Store, tags=["store"])
+@router.get("/stores/{store_id}", response_model=StoreWithDetails, tags=["store"])
 def get_store_info(store_id: int, session: Session = Depends(get_db)):
 
     try:

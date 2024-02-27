@@ -23,7 +23,10 @@ def get_history_info_by_id(session: Session, _id: int) -> History:
 
 # Function to add a new history info to the database
 def create_history(session: Session, history_info: CreateAndUpdateHistory) -> History:
-    history_details = session.query(History).filter(History.date == history_info.date).first()
+    history_details = session.query(History).filter(History.date == history_info.date,
+                                                    History.product_id == history_info.product_id,
+                                                    History.store_id == history_info.store_id,
+                                                    History.price == history_info.price).first()
     if history_details is not None:
         raise HistoryInfoAlreadyExistError
 
@@ -44,6 +47,7 @@ def update_history_info(session: Session, _id: int, info_update: CreateAndUpdate
     history_info.product_id = info_update.product_id
     history_info.store_id = info_update.store_id
     history_info.price = info_update.price
+    history_info.price_credit = info_update.price_credit
     history_info.url = info_update.url
     history_info.date = info_update.date
 
