@@ -21,8 +21,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8888
 
 # Define environment variable
-ENV MYSQL_HOST=host.docker.internal
-ENV MYSQL_USER="admin"
+ENV MYSQL_HOST=35.239.85.126
+ENV MYSQL_USER="root"
 ENV MYSQL_PASSWORD="sony1208"
 ENV MYSQL_DB="price_tracker"
 ENV MODULE_NAME="main"
