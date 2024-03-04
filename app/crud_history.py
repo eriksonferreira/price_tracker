@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from exceptions import HistoryInfoAlreadyExistError, HistoryNotFoundError
 from models import History
 from schemas import CreateAndUpdateHistory
-
+from sqlalchemy import desc
 
 # Function to get list of product info
 def get_all_historys(session: Session, limit: int, offset: int) -> List[History]:
@@ -23,9 +23,14 @@ def get_history_info_by_id(session: Session, _id: int) -> History:
 
 # Function to add a new history info to the database
 def create_history(session: Session, history_info: CreateAndUpdateHistory) -> History:
-    history_details = session.query(History).filter(History.product_id == history_info.product_id,
-                                                    History.store_id == history_info.store_id,
-                                                    History.price == history_info.price).first()
+    history_details = session.query(History).filter(
+            History.product_id == history_info.product_id,
+            History.store_id == history_info.store_id,
+            History.price == history_info.price,
+            History.price_credit == history_info.price_credit,
+            History.sku == history_info.sku
+        ).order_by(desc(History.id)).first()
+    
     if history_details is not None:
         raise HistoryInfoAlreadyExistError
 

@@ -28,7 +28,8 @@ def get_product_info_by_id(session: Session, _id: int) -> ProductInfo:
 # Function to add a new product info to the database
 def create_product(session: Session, product_info: CreateAndUpdateProduct) -> ProductInfo:
     product_details = session.query(ProductInfo).filter(ProductInfo.model == product_info.model,
-                                                        ProductInfo.manufacturer == product_info.manufacturer).first()
+                                                        ProductInfo.manufacturer == product_info.manufacturer,
+                                                        ProductInfo.sku == product_info.sku).first()
     if product_details is not None:
         prod_details = {
         'id': product_details.id,
@@ -37,7 +38,8 @@ def create_product(session: Session, product_info: CreateAndUpdateProduct) -> Pr
         'model': product_details.model,
         'memory': product_details.memory,
         'memory_type': product_details.memory_type,
-        'sku': product_details.sku
+        'sku': product_details.sku,
+        'image': product_details.image
         }
         raise ProductInfoInfoAlreadyExistError( "Product Info Already Exists", prod_details)
 
@@ -61,6 +63,7 @@ def update_product_info(session: Session, _id: int, info_update: CreateAndUpdate
     product_info.memory = info_update.memory
     product_info.memory_type = info_update.memory_type
     product_info.sku = info_update.sku
+    product_info.image = info_update.image
 
     session.commit()
     session.refresh(product_info)

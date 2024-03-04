@@ -16,6 +16,7 @@ class ProductInfo(Base):
     memory = Column(String)
     memory_type = Column(String)
     sku = Column(String)
+    image = Column(String)
 
     # Definindo a relação com Prices
     prices = relationship("Prices", backref="product")
@@ -44,6 +45,7 @@ class History(Base):
     id = Column(Integer, primary_key=True, index=True)
     product_id = Column(Integer, sa.ForeignKey(ProductInfo.id))
     store_id = Column(Integer, sa.ForeignKey(Store.id))
+    sku = Column(String)
     price = Column(Float)
     price_credit = Column(Float)
     url = Column(String)

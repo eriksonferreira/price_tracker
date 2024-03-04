@@ -26,6 +26,7 @@ class PaginatedStore(BaseModel):
 class CreateAndUpdateHistory(BaseModel):
     product_id: int
     store_id: int
+    sku: str
     price: float
     price_credit: float
     url: str
@@ -48,7 +49,7 @@ class CreateAndUpdatePrice(BaseModel):
     store_id: int
     actual_price: float
     actual_price_credit: float
-    all_time_low: int
+    all_time_low: Optional[int] = None
 
 
 class Price(CreateAndUpdatePrice):
@@ -72,6 +73,7 @@ class CreateAndUpdateProduct(BaseModel):
     memory: str
     memory_type: str
     sku: str
+    image: Optional[str]
 
 
 # TO support list and get APIs

@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from exceptions import PricesInfoAlreadyExistError, PricesNotFoundError
 from models import Prices
 from schemas import CreateAndUpdateProduct
+from telegram.app.services import message_send
 
 
 # Function to get list of product info
@@ -23,7 +24,9 @@ def get_price_info_by_id(session: Session, _id: int) -> Prices:
 
 # Function to add a new price info to the database
 def create_price(session: Session, price_info: CreateAndUpdateProduct) -> Prices:
-    price_details = session.query(Prices).filter(Prices.product_id == price_info.product_id, Prices.store_id == price_info.store_id).first()
+    price_details = session.query(Prices).filter(Prices.product_id == price_info.product_id, 
+                                                 Prices.store_id == price_info.store_id, 
+                                                 Prices.actual_price == price_info.actual_price).first()
     if price_details is not None:
         raise PricesInfoAlreadyExistError
 
@@ -45,7 +48,8 @@ def update_price_info(session: Session, _id: int, info_update: CreateAndUpdatePr
     price_info.store_id = info_update.store_id
     price_info.actual_price = info_update.actual_price
     price_info.actual_price_credit = info_update.actual_price_credit
-    price_info.all_time_low = info_update.all_time_low
+    if info_update.all_time_low is not None:
+        price_info.all_time_low = info_update.all_time_low
     
     session.commit()
     session.refresh(price_info)

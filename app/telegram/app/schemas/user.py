@@ -8,6 +8,12 @@ class PlainMessageSend(BaseModel):
     text: str
 
 
+class PlainPhotoSend(BaseModel):
+    # chat_id: int
+    image_url: str
+    text: str
+
+
 class DocumentCreate(BaseModel):
     document_id: str
 

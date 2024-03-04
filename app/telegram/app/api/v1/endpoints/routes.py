@@ -9,6 +9,7 @@ from telegram.app.services import (
     message_send,
     message_send_multiple,
     tg_document_create,
+    photo_send
 )
 
 router = APIRouter()
@@ -18,6 +19,13 @@ router = APIRouter()
 async def send_plain_message(message: schemas.PlainMessageSend) -> Optional[NoReturn]:
     # TODO: consider handling exception on unknown PEER_ID
     await message_send(message)
+    return
+
+
+@router.post('/send_photo', status_code=status.HTTP_200_OK, response_model=None)
+async def send_photo_message(message: schemas.PlainPhotoSend) -> Optional[NoReturn]:
+    # TODO: consider handling exception on unknown PEER_ID
+    await photo_send(message)
     return
 
 
