@@ -31,7 +31,9 @@ class Store(Base):
     name = Column(String)
     base_url = Column(String)
     logo = Column(String)
-
+    update_min_time = Column(Integer)
+    update_max_time = Column(Integer)
+    
     # Relação com History
     history = relationship("History", backref="store")
 

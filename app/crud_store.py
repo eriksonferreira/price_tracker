@@ -44,6 +44,8 @@ def update_store_info(session: Session, _id: int, info_update: CreateAndUpdatePr
     store_info.name = info_update.name
     store_info.base_url = info_update.base_url
     store_info.logo = info_update.logo
+    store_info.update_min_time = info_update.update_min_time
+    store_info.update_max_time = info_update.uptade_max_time
     
     session.commit()
     session.refresh(store_info)

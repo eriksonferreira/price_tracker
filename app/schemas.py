@@ -89,6 +89,8 @@ class StoreDetail(BaseModel):
     name: str
     base_url: str
     logo: str
+    update_min_time: Optional[int]
+    update_max_time: Optional[int]
 
     class Config:
         orm_mode = True
