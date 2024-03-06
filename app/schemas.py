@@ -9,6 +9,8 @@ class CreateAndUpdateStore(BaseModel):
     name: str
     base_url: str
     logo: str
+    update_min_time: Optional[int]
+    update_max_time: Optional[int]
 
 
 class Store(CreateAndUpdateStore):
