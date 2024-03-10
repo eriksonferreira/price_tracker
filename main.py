@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import app.products_api as products_api
 import app.store_api as store_api
@@ -28,6 +29,16 @@ tags_metadata = [
 
 # Initialize the app
 app = FastAPI(openapi_tags=tags_metadata)
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    # allow_credentials=True,
+    # allow_methods=["*"],
+    # allow_headers=["*"],
+)
+
 
 app.include_router(products_api.router)
 app.include_router(store_api.router)
