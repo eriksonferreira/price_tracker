@@ -29,16 +29,18 @@ tags_metadata = [
 
 # Initialize the app
 app = FastAPI(openapi_tags=tags_metadata)
-origins = ["http://localhost:3000/", "200.110.205.75"]
+allowed_origins = [
+    "http://localhost:3000",  # Add more origins as needed
+]
 
+# Add CORSMiddleware to the application
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=allowed_origins,  # List of allowed origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
 )
-
 
 app.include_router(products_api.router)
 app.include_router(store_api.router)
