@@ -34,13 +34,22 @@ class CreateAndUpdateHistory(BaseModel):
     url: str
     date: int
 
-class History(CreateAndUpdateHistory):
+class History(BaseModel):
     id: int
-    date: datetime  # Mudar o tipo de 'int' para 'datetime'
+    product_id: int
+    store_id: int
+    sku: str
+    price: float
+    price_credit: float
+    url: str
+    date: datetime  # Certifique-se de que o tipo esperado é datetime
 
-    @validator('date', pre=True, allow_reuse=True)
+    @validator('date', pre=True)
     def convert_epoch_to_datetime(cls, value):
-        return datetime.fromtimestamp(value) if value else None
+        # A conversão só ocorre se o valor for um int (ou seja, um timestamp epoch)
+        if isinstance(value, int):
+            return datetime.fromtimestamp(value)
+        return value
 
     class Config:
         orm_mode = True

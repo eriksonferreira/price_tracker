@@ -22,7 +22,7 @@ class Products:
     @router.get("/historys", response_model=PaginatedHistory, tags=["history"])
     def list_historys(
         self,
-        session: Session = Depends(),  # Dependência para a sessão do SQLAlchemy
+        session: Session = Depends(get_db),  # Dependência para a sessão do SQLAlchemy
         limit: int = 10,
         offset: int = 0,
         product_id: Optional[int] = None,

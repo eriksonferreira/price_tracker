@@ -8,7 +8,7 @@ load_dotenv()
 
 
 MYSQL_USER = os.environ['MYSQL_USER']
-MYSQL_HOST=os.environ.get('MYSQL_HOST', 'localhost')
+MYSQL_HOST=os.environ.get('MYSQL_HOST', '35.239.85.126')
 MYSQL_USER=os.environ['MYSQL_USER']
 MYSQL_PASSWORD=os.environ['MYSQL_PASSWORD']
 MYSQL_DB=os.environ['MYSQL_DB']
