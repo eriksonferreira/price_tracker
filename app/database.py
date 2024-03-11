@@ -18,7 +18,7 @@ SQLALCHEMY_DATABASE_URL = f"mysql+mysqldb://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, echo=True, isolation_level="READ UNCOMMITTED"
 )
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, future=True)
 Base = declarative_base()
 
 def get_db():

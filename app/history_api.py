@@ -7,6 +7,8 @@ from database import get_db
 from exceptions import HistoryException
 from schemas import History, CreateAndUpdateHistory, PaginatedHistory
 from typing import List, Optional
+from fastapi.responses import JSONResponse
+
 
 router = APIRouter()
 

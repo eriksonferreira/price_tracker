@@ -1,5 +1,5 @@
 # schemas.py
-from pydantic import BaseModel
+from pydantic import BaseModel, validator   
 # from models import ProductInfo
 from typing import Optional, List
 from datetime import datetime
@@ -36,6 +36,12 @@ class CreateAndUpdateHistory(BaseModel):
 
 class History(CreateAndUpdateHistory):
     id: int
+    date: datetime  # Mudar o tipo de 'int' para 'datetime'
+
+    @validator('date', pre=True, allow_reuse=True)
+    def convert_epoch_to_datetime(cls, value):
+        return datetime.fromtimestamp(value) if value else None
+
     class Config:
         orm_mode = True
 
