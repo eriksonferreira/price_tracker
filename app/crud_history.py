@@ -5,10 +5,25 @@ from exceptions import HistoryInfoAlreadyExistError, HistoryNotFoundError
 from models import History
 from schemas import CreateAndUpdateHistory
 from sqlalchemy import desc
-
+from typing import List, Optional
+from datetime import datetime
 # Function to get list of product info
-def get_all_historys(session: Session, limit: int, offset: int) -> List[History]:
-    return session.query(History).offset(offset).limit(limit).all()
+def get_all_historys(session: Session, limit: int, offset: int, product_id: Optional[int] = None, store_id: Optional[int] = None) -> List[History]:
+    query = session.query(History)
+
+    if product_id:
+        query = query.filter(History.product_id == product_id)
+    if store_id:
+        query = query.filter(History.store_id == store_id)
+
+    historys = query.offset(offset).limit(limit).all()
+
+    # Convertendo o valor epoch para datetime
+    for history in historys:
+        if history.date:  # Certifique-se de que há um valor antes de converter
+            history.date = datetime.fromtimestamp(history.date)
+
+    return historys
 
 
 # Function to  get info of a particular history

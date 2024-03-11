@@ -6,6 +6,7 @@ from crud_history import get_all_historys, create_history, get_history_info_by_i
 from database import get_db
 from exceptions import HistoryException
 from schemas import History, CreateAndUpdateHistory, PaginatedHistory
+from typing import List, Optional
 
 router = APIRouter()
 
@@ -17,9 +18,15 @@ class Products:
 
     # API to get the list of history info
     @router.get("/historys", response_model=PaginatedHistory, tags=["history"])
-    def list_historys(self, limit: int = 10, offset: int = 0):
+    def list_historys(
+        self,
+        session: Session = Depends(),  # Dependência para a sessão do SQLAlchemy
+        limit: int = 10,
+        offset: int = 0,
+        product_id: Optional[int] = None,
+        store_id: Optional[int] = None,):
 
-        historys_list = get_all_historys(self.session, limit, offset)
+        historys_list = get_all_historys(session, limit, offset, product_id, store_id)
         response = {"limit": limit, "offset": offset, "data": historys_list}
 
         return response

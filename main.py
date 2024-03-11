@@ -7,6 +7,7 @@ import app.store_api as store_api
 import app.history_api as history_api
 import app.price_api as price_api
 
+
 tags_metadata = [
     {
         "name": "products",
