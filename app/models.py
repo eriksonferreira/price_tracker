@@ -63,7 +63,9 @@ class Prices(Base):
     actual_price = Column(Float)
     actual_price_credit = Column(Float)
     all_time_low = Column(Integer, sa.ForeignKey(History.id))
+    actual_price_id = Column(Integer, sa.ForeignKey(History.id))
     
+    actual_price_id_info = relationship("History", foreign_keys=[actual_price_id], backref="actual_price_id")
+
     # Relação para acessar o registro de History referente a all_time_low
     all_time_low_history = relationship("History", foreign_keys=[all_time_low], backref="all_time_low_prices")
-

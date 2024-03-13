@@ -1,15 +1,18 @@
 # crud.py
 from typing import List
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from exceptions import PricesInfoAlreadyExistError, PricesNotFoundError
-from models import Prices
-from schemas import CreateAndUpdateProduct
+from models import Prices, History
+from schemas import CreateAndUpdatePrice, Price
 from telegram.app.services import message_send
 
 
 # Function to get list of product info
 def get_all_prices(session: Session, limit: int, offset: int) -> List[Prices]:
-    return session.query(Prices).offset(offset).limit(limit).all()
+    return session.query(Prices).options(
+        joinedload(Prices.actual_price_id_info)  # Correctly load the relationship
+    ).offset(offset).limit(limit).all()
+
 
 
 # Function to  get info of a particular price
@@ -23,7 +26,7 @@ def get_price_info_by_id(session: Session, _id: int) -> Prices:
 
 
 # Function to add a new price info to the database
-def create_price(session: Session, price_info: CreateAndUpdateProduct) -> Prices:
+def create_price(session: Session, price_info: CreateAndUpdatePrice) -> Prices:
     price_details = session.query(Prices).filter(Prices.product_id == price_info.product_id, 
                                                  Prices.store_id == price_info.store_id, 
                                                  Prices.actual_price == price_info.actual_price).first()
@@ -38,7 +41,7 @@ def create_price(session: Session, price_info: CreateAndUpdateProduct) -> Prices
 
 
 # Function to update details of the price
-def update_price_info(session: Session, _id: int, info_update: CreateAndUpdateProduct) -> Prices:
+def update_price_info(session: Session, _id: int, info_update: CreateAndUpdatePrice) -> Prices:
     price_info = get_price_info_by_id(session, _id)
 
     if price_info is None:

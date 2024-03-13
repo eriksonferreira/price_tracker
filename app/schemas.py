@@ -67,10 +67,13 @@ class CreateAndUpdatePrice(BaseModel):
     actual_price: float
     actual_price_credit: float
     all_time_low: Optional[int] = None
+    actual_price_id: Optional[int] = None
 
 
 class Price(CreateAndUpdatePrice):
     id: int
+    actual_price_id_info: Optional[History] = None
+    all_time_low_history: Optional[History] = None
     class Config:
         orm_mode = True
 
@@ -116,6 +119,7 @@ class HistoryDetail(BaseModel):
     id: int
     price: float
     price_credit: float
+    url: str
     date: datetime
 
     class Config:
@@ -132,6 +136,7 @@ class StoreWithDetails(Store):
 
 class PriceWithDetails(Price):
     store: Optional[StoreDetail] = None
+    actual_price_id: Optional[HistoryDetail] = None
     all_time_low_history: Optional[HistoryDetail] = None
 
     class Config:
