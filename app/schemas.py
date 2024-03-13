@@ -136,7 +136,7 @@ class StoreWithDetails(Store):
 
 class PriceWithDetails(Price):
     store: Optional[StoreDetail] = None
-    actual_price_id: Optional[HistoryDetail] = None
+    actual_price_id_info: Optional[History] = None
     all_time_low_history: Optional[HistoryDetail] = None
 
     class Config:
