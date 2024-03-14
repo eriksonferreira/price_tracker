@@ -38,7 +38,7 @@ app = FastAPI(openapi_tags=tags_metadata)
 
 allowed_origins = [
     "http://localhost:3000",
-    "https://price-tracker-frontend.rj.r.appspot.com/"  # Add more origins as needed
+    "https://price-tracker-frontend.rj.r.appspot.com"  # Add more origins as needed
 ]
 
 # Add CORSMiddleware to the application
