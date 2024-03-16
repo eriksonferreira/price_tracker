@@ -7,6 +7,7 @@ from schemas import CreateAndUpdateHistory
 from sqlalchemy import desc
 from typing import List, Optional
 from datetime import datetime
+import pytz
 # Function to get list of product info
 def get_all_historys(session: Session, limit: int, offset: int, product_id: Optional[int] = None, store_id: Optional[int] = None) -> List[History]:
     query = session.query(History)
@@ -21,7 +22,8 @@ def get_all_historys(session: Session, limit: int, offset: int, product_id: Opti
     # Convertendo o valor epoch para datetime
     for history in historys:
         if history.date:  # Certifique-se de que há um valor antes de converter
-            history.date = datetime.fromtimestamp(history.date, tz='America/Sao_Paulo')
+            tz = pytz.timezone('America/Sao_Paulo')
+            history.date = datetime.fromtimestamp(history.date, tz=tz)
 
     return historys
 
