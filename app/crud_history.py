@@ -21,7 +21,7 @@ def get_all_historys(session: Session, limit: int, offset: int, product_id: Opti
     # Convertendo o valor epoch para datetime
     for history in historys:
         if history.date:  # Certifique-se de que há um valor antes de converter
-            history.date = datetime.fromtimestamp(history.date)
+            history.date = datetime.fromtimestamp(history.date, tz='America/Sao_Paulo')
 
     return historys
 
